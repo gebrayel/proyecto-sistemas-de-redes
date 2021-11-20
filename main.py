@@ -42,8 +42,8 @@ def shortestPath(graphX: Graph,nodeActual: Node):
     # print(nodeActual.distMin)
     if not (nodeActual.distMin == 0 ) :
         
-        return nodeActual.distMin + shortestPath (graphX, graphX.nodes_dict[nodeActual.pred])
-    return 0
+        return  shortestPath (graphX, graphX.nodes_dict[nodeActual.pred])+ "-->" + nodeActual.id 
+    return nodeActual.id 
 
 def dijkstra(graphX: Graph, startNode:str):
     graphX.nodes_dict[startNode].set_distMin(0)
@@ -281,20 +281,15 @@ def path():
 
     print("viene javier")
     dijkstra(graphJ, startNodeJ)
-
+    destinatation :str = Bar
     # print(graphA.nodes_dict)
-    pathAndreinaSum = graphA.nodes_dict[Disco].distMin
-    pathJavierSum = graphJ.nodes_dict[Disco].distMin
-    print(f'Javier Min Path = {pathJavierSum} \nAndreina Min Path = {pathAndreinaSum}')
+    pathAndreinaSum = graphA.nodes_dict[destinatation].distMin
+    pathJavierSum = graphJ.nodes_dict[destinatation].distMin
+    print(f'Javier Min Path = {pathJavierSum} por {shortestPath(graphJ, graphJ.nodes_dict[destinatation])} \nAndreina Min Path = {pathAndreinaSum} por {shortestPath(graphA, graphA.nodes_dict[destinatation])} ')
     return 
 
 def main():
     path()
 
 
-
-
-
-
-    
 main()
