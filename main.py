@@ -47,8 +47,14 @@ def shortestPath(graphX: Graph,nodeActual: Node):
 
 def dijkstra(graphX: Graph, startNode:str):
     graphX.nodes_dict[startNode].set_distMin(0)
-
-    nonVisitedNodes = nodesId
+    print(graphX.nodes_dict)
+    nonVisitedNodes = []
+    if len(nodesId)<1:
+        print('entro')
+        for i in graphX.nodes_dict.keys():
+            nonVisitedNodes.append(i)
+    else:
+        nonVisitedNodes = nodesId
 
     while len(nonVisitedNodes) >0:
         lessDist: int = sys.maxsize
@@ -72,7 +78,8 @@ def dijkstra(graphX: Graph, startNode:str):
         #mark visited actual node
         graphX.nodes_dict[lessId].visit()
         nonVisitedNodes.remove(lessId)
-
+    print(nonVisitedNodes)
+    print(nodesId)
 
     return 0
 def path():
@@ -270,13 +277,15 @@ def path():
     graphA.add_edge('5415', '5515', 7)
     # print('a')
 
-    # dijkstra(graphJ, startNodeJ)
-
     dijkstra(graphA, startNodeA)
+
+    print("viene javier")
+    dijkstra(graphJ, startNodeJ)
+
     # print(graphA.nodes_dict)
-    pathJavierSum = graphJ.nodes_dict[Brewery].distMin
-    pathAndreinaSum = graphA.nodes_dict[Bar].distMin
-    print(f'Javier Min Path = {pathJavierSum} \n Andreina Min Path = {pathAndreinaSum}')
+    pathAndreinaSum = graphA.nodes_dict[Disco].distMin
+    pathJavierSum = graphJ.nodes_dict[Disco].distMin
+    print(f'Javier Min Path = {pathJavierSum} \nAndreina Min Path = {pathAndreinaSum}')
     return 
 
 def main():
