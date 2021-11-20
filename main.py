@@ -15,12 +15,13 @@ Brewery = "5012"
 Disco = "5014"
 Bar = "5411"
 
-graphJ = Graph()
-graphA = Graph()
 
 
 def create():
-
+    global graphJ 
+    global graphA 
+    global nodes
+    global nodesId
     graphJ = Graph()
     graphA = Graph()
     for i in range (50,56):
@@ -33,25 +34,27 @@ def create():
             graphA.add_node(f'{i}{j}')
             nodesId.append(f'{i}{j}')
             # print(f'calle {i} con carrera {j}')
-    print(nodes)
-    print(nodesId)
+    # print(graphA.nodes_dict)
+    # print(nodesId)
 
 def shortestPath(graphX: Graph,nodeActual: Node):
-    if not (nodeActual.distMin == 0):
-        return nodeActual.distMin + shortestPath (graphX.nodes_dict[nodeActual.pred])
+    # print('num'+nodeActual.id)
+    # print(nodeActual.distMin)
+    if not (nodeActual.distMin == 0 ) :
+        
+        return nodeActual.distMin + shortestPath (graphX, graphX.nodes_dict[nodeActual.pred])
     return 0
 
 def dijkstra(graphX: Graph, startNode:str):
-
-    graphX.nodes_dict[startNode].distMin(0)
+    graphX.nodes_dict[startNode].set_distMin(0)
 
     nonVisitedNodes = nodesId
 
-    while nonVisitedNodes >0:
+    while len(nonVisitedNodes) >0:
         lessDist: int = sys.maxsize
         lessId: str
-
-        for i in range (len(nonVisitedNodes)+1):
+        for i in range (len(nonVisitedNodes)):
+            
             curValue = graphX.nodes_dict[nonVisitedNodes[i]].distMin
             if curValue < lessDist:
                 lessDist = curValue
@@ -59,23 +62,21 @@ def dijkstra(graphX: Graph, startNode:str):
         
         # visit graphX.nodes_dict[lessId]
         items = graphX.nodes_dict[lessId].adj.items()
-        distTillAct: int = shortestPath(graphX, graphX.nodes_dict[lessId])
-        for j in (len(items)+1):
-            if not ((graphX.nodes_dict[items[j][0]]).visited):
-                sum = distTillAct + (graphX.nodes_dict[items[j][1]])
-                if (sum < graphX.nodes_dict[items[j][0]].distMin):
-                    graphX.nodes_dict[items[j][0]].distMin = sum
-                    graphX.nodes_dict[items[j][0]].pred = items[j][0]
+        distTillAct: int = graphX.nodes_dict[lessId].distMin
+        for j,k in ((items)):
+            if not ((j).visited):
+                sum = distTillAct + (k)
+                if (sum < j.distMin):
+                    j.set_distMin(sum)
+                    j.set_predec(lessId) 
         #mark visited actual node
-        graphX.nodes_dict[lessId].visted = True
+        graphX.nodes_dict[lessId].visit()
         nonVisitedNodes.remove(lessId)
 
 
     return 0
-
 def path():
     create()
-    
     #aristas javier
 
     #fila 50
@@ -267,11 +268,14 @@ def path():
     graphA.add_edge('5413', '5513', 9)
     graphA.add_edge('5414', '5514', 9)
     graphA.add_edge('5415', '5515', 7)
+    # print('a')
 
-    dijkstra(graphJ, startNodeJ)
+    # dijkstra(graphJ, startNodeJ)
+
     dijkstra(graphA, startNodeA)
-    pathJavierSum = shortestPath(graphJ, graphJ.nodes_dict[Disco])
-    pathAndreinaSum = shortestPath(graphA, graphA.nodes_dict[Disco])
+    # print(graphA.nodes_dict)
+    pathJavierSum = graphJ.nodes_dict[Brewery].distMin
+    pathAndreinaSum = graphA.nodes_dict[Bar].distMin
     print(f'Javier Min Path = {pathJavierSum} \n Andreina Min Path = {pathAndreinaSum}')
     return 
 

@@ -1,5 +1,5 @@
 from node import *
-class Graph():
+class Graph:
 
     def __init__(self):
         self.nodes_dict = {}
@@ -20,3 +20,5 @@ class Graph():
         self.nodes_dict[nodeFrom].add_neighbor(self.nodes_dict[nodeTo], time)
         self.nodes_dict[nodeTo].add_neighbor(self.nodes_dict[nodeFrom], time)
 
+    def debug(self):
+        print(self.nodes_dict)

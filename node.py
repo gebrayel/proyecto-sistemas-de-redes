@@ -11,10 +11,10 @@ class  Node:
     def visit (self):
         self.visited = True
 
-    def predec (self, pred:str):
+    def set_predec (self, pred:str):
         self.pred = pred
 
-    def distMin(self, distMin: int):
+    def set_distMin(self, distMin: int):
         self.distMin = distMin
 
     def add_neighbor(self, neighbor: str, time: int):
