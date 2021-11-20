@@ -2,7 +2,6 @@ import sys
 from node import *
 from graph import *
 from edges import *
-# print(sys.maxsize)
 
 nodes:int = 0
 nodesId = []
