@@ -17,5 +17,5 @@ class  Node:
     def distMin(self, distMin: int):
         self.distMin = distMin
 
-    def neighbor(self, neighbor: str, time: int):
+    def add_neighbor(self, neighbor: str, time: int):
         self.adj[neighbor] = time
