@@ -15,6 +15,18 @@ Disco = "5014"
 Bar = "5411"
 
 
+def maximum(a, b):
+     
+    if a > b:
+        c=str(a-b)
+        print("Andreína debe salir "+c+"min después de Javier para llegar al mismo tiempo")
+        return 
+    elif a< b:
+        c=str(b-a)
+        print("Javier debe salir "+c+"min después de Andreína para llegar al mismo tiempo")
+        return
+    else: 
+         print("Ambos se encuentran si salen al mismo tiempo.")
 
 def create():
     global graphJ 
@@ -46,10 +58,14 @@ def shortestPath(graphX: Graph,nodeActual: Node):
 
 def dijkstra(graphX: Graph, startNode:str):
     graphX.nodes_dict[startNode].set_distMin(0)
-    print(graphX.nodes_dict)
+    #---------------------------------------------------------------
+    #print(graphX.nodes_dict)
+    #---------------------------------------------------------------
     nonVisitedNodes = []
     if len(nodesId)<1:
-        print('entro')
+        #---------------------------------------------------------------
+        #print('entro')
+        #---------------------------------------------------------------
         for i in graphX.nodes_dict.keys():
             nonVisitedNodes.append(i)
     else:
@@ -77,11 +93,13 @@ def dijkstra(graphX: Graph, startNode:str):
         #mark visited actual node
         graphX.nodes_dict[lessId].visit()
         nonVisitedNodes.remove(lessId)
-    print(nonVisitedNodes)
-    print(nodesId)
+    #---------------------------------------------------------------
+    #print(nonVisitedNodes)
+    #print(nodesId)
+    #---------------------------------------------------------------
 
     return 0
-def path():
+def path(finalNode:str):
     create()
     #aristas javier
 
@@ -90,18 +108,53 @@ def path():
     # print('a')
 
     dijkstra(graphA, startNodeA)
-
-    print("viene javier")
+    #---------------------------------------------------------------
+    #print("viene javier")
+    #---------------------------------------------------------------
     dijkstra(graphJ, startNodeJ)
-    destinatation :str = Bar
+    destinatation :str = finalNode
     # print(graphA.nodes_dict)
     pathAndreinaSum = graphA.nodes_dict[destinatation].distMin
     pathJavierSum = graphJ.nodes_dict[destinatation].distMin
-    print(f'Javier Min Path = {pathJavierSum} por {shortestPath(graphJ, graphJ.nodes_dict[destinatation])} \nAndreina Min Path = {pathAndreinaSum} por {shortestPath(graphA, graphA.nodes_dict[destinatation])} ')
+    print(f'El tiempo mímimo de Javier es {pathJavierSum}min por {shortestPath(graphJ, graphJ.nodes_dict[destinatation])} \nEl tiempo mímimo de Andreina es {pathAndreinaSum}min por {shortestPath(graphA, graphA.nodes_dict[destinatation])} '+"\n")
+    maximum(pathJavierSum,pathAndreinaSum)
     return 
 
 def main():
-    path()
+    loop = "0"
+    while loop == "0":
+        print("Javier y Andreina deben escojer su destino.")
+        print ("1. Ir al Brewery.")
+        print ("2. Ir a la Disco.")
+        print ("3. Ir al Bar.")
+        destino = input("Ingrese 1,2 ó 3, según corresponda: ")
+        if destino == "1":
+            destino = Brewery
+            print ("Javier y Andreina irán al Brewery"+ "\n"*5)
+            path(destino)
+            print("Oprime 0 si deseas escojer un nuevo destino.")
+            loop = input()
+            print("\n"*5)
+        elif destino == "2":
+            destino = Disco
+            print ("Javier y Andreina irán a la Disco"+ "\n"*5)
+            path(destino)
+            print("Oprime 0 si deseas escojer un nuevo destino.")
+            loop = input()
+            print("\n"*5)
+        elif destino == "3":
+            destino = Bar
+            print ("Javier y Andreina irán al Bar"+ "\n"*5)
+            path(destino)
+            print("Oprime 0 si deseas escojer un nuevo destino.")
+            loop = input()
+            print("\n"*5)
+
+        else:
+            print ("I'm sorry, I didn't get that" + "\n"*5)
+        
+        
+
 
 
 main()
