@@ -276,9 +276,9 @@ def menu2():
                     option -= 1
                 elif c == curses.KEY_DOWN and option < len(classes) - 1:
                     option += 1
-
             stdscr.addstr("You chose {0}\nPress any key to back".format(classes[option]))
             stdscr.getch()
+            
             bool=False
     def menucito():
 
