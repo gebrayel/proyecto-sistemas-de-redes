@@ -259,6 +259,8 @@ def menu2():
 
         bool = True
         while bool:
+            global resultString
+            resultString = ""
             attributes = {}
             curses.init_pair(1, curses.COLOR_WHITE, curses.COLOR_BLACK)
             attributes['normal'] = curses.color_pair(1)
@@ -297,7 +299,7 @@ def menu2():
             option = 0  # the current option that is marked
             while c != 10:  # Enter in ascii
                 stdscr.erase()
-                stdscr.addstr(f"{resultString}\n", curses.A_UNDERLINE)
+                stdscr.addstr(f"\n\n{resultString}\n")
                 stdscr.addstr("\n\n\nQue desea hacer?\n", curses.A_UNDERLINE)
                 for i in range(len(decisiones)):
                     if i == option:
@@ -311,9 +313,10 @@ def menu2():
                     option -= 1
                 elif c == curses.KEY_DOWN and option < len(decisiones) - 1:
                     option += 1
+
+                if not numeros[option]:
+                    bool = False
             
-            if not numeros[option]:
-                bool = False
             
             
                 
