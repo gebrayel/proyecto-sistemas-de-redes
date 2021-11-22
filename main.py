@@ -292,8 +292,11 @@ def menu2():
             curses.init_pair(1, curses.COLOR_WHITE, curses.COLOR_BLACK)
             attributes['normal'] = curses.color_pair(1)
 
-            curses.init_pair(2, curses.COLOR_BLACK, curses.COLOR_WHITE)
+            curses.init_pair(2, curses.COLOR_GREEN, curses.COLOR_BLACK)
             attributes['highlighted'] = curses.color_pair(2)
+
+            curses.init_pair(3, curses.COLOR_RED, curses.COLOR_BLACK)
+            attributes['exit'] = curses.color_pair(3)
 
             c = 0  # last character read
             option = 0  # the current option that is marked
@@ -303,7 +306,10 @@ def menu2():
                 stdscr.addstr("\n\n\nQue desea hacer?\n", curses.A_UNDERLINE)
                 for i in range(len(decisiones)):
                     if i == option:
-                        attr = attributes['highlighted']
+                        if option == 0:
+                            attr = attributes['highlighted']
+                        else:
+                            attr = attributes['exit']
                     else:
                         attr = attributes['normal']
                     stdscr.addstr("{0}. ".format(i + 1))
@@ -313,9 +319,13 @@ def menu2():
                     option -= 1
                 elif c == curses.KEY_DOWN and option < len(decisiones) - 1:
                     option += 1
+            
+            if not (numeros[option]):
+                bool = False
 
-                if not numeros[option]:
-                    bool = False
+                
+
+                
             
             
             
