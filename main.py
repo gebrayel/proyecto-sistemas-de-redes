@@ -3,6 +3,7 @@ from node import *
 from graph import *
 from edges import *
 from test import *
+import curses
 
 nodes:int = 0
 nodesId = []
@@ -21,20 +22,22 @@ resultString:str = ""
 def maximum(a, b, stdscr):
      
     global resultString
+
+    resultString += "Para lograr llegar juntos es importante que "
     if a > b:
         c=str(a-b)
-        resultString = resultString + "Andreína debe salir "+c+"min después de Javier para llegar al mismo tiempo"
+        resultString = resultString + "Andreína salga "+c+" minutos después de Javier"
         # stdscr.addstr("Andreína debe salir "+c+"min después de Javier para llegar al mismo tiempo", curses.A_UNDERLINE)
         
         return 
     elif a< b:
         c=str(b-a)
-        resultString = resultString + "Javier debe salir "+c+"min después de Andreína para llegar al mismo tiempo"
+        resultString = resultString + "Javier debe salga "+c+" minutos después de Andreína"
         
         
         return
     else: 
-        resultString = resultString + "Ambos se encuentran si salen al mismo tiempo."
+        resultString = resultString + "Ambos salgan al mismo tiempo"
         
         
 def create():
@@ -62,14 +65,21 @@ def create():
             # print(f'calle {i} con carrera {j}')
     # print(graphA.nodes_dict)
     # print(nodesId)
-
 def shortestPath(graphX: Graph,nodeActual: Node):
     # print('num'+nodeActual.id)
     # print(nodeActual.distMin)
     if not (nodeActual.distMin == 0 ) :
         
-        return  shortestPath (graphX, graphX.nodes_dict[nodeActual.pred])+ "-->" + nodeActual.id 
-    return nodeActual.id 
+        return  shortestPath (graphX, graphX.nodes_dict[nodeActual.pred])+ " ==>" + f' Calle {nodeActual.id[0:2]} con carrera {nodeActual.id[2:4]}' 
+    return f'Calle {nodeActual.id[0:2]} con carrera {nodeActual.id[2:4]}' 
+
+def shortestPath2(graphX: Graph,nodeActual: Node):
+    # print('num'+nodeActual.id)
+    # print(nodeActual.distMin)
+    if not (nodeActual.distMin == 0 ) :
+        
+        return  shortestPath (graphX, graphX.nodes_dict[nodeActual.pred])+ "luego va a" + f'la calle {nodeActual.id[0:2]} con carrera {nodeActual.id[2:4]} y habra llegado a su destino' 
+    return f'Comienza en la calle {nodeActual.id[0:2]} con carrera {nodeActual.id[2:4]}' 
 
 def restrictedDijkstra(graphX: Graph, startNode:str, pred:str, target: str):
     graphX.nodes_dict[startNode].set_distMin(0)
@@ -207,14 +217,14 @@ def path(finalNode:str, stdscr):
     if(firstMax <= secondMax):
         pathAndreinaSum = graphA.nodes_dict[destinatation].distMin
         pathJavierSum = graphJ.nodes_dict[destinatation].distMin
-        resultString = resultString + f'El tiempo mímimo de Javier es {pathJavierSum}min por {shortestPath(graphJ, graphJ.nodes_dict[destinatation])} \nEl tiempo mímimo de Andreina es {pathAndreinaSum}min por {shortestPath(graphA, graphA.nodes_dict[destinatation])}\n'
+        resultString = resultString + f'El tiempo mímimo de Javier caminando es de {pathJavierSum} minutos por la siguiente ruta:  \n{shortestPath(graphJ, graphJ.nodes_dict[destinatation])} \n\nEl tiempo mímimo de Andreina caminando es de {pathAndreinaSum} minutos por la siguiente ruta: \n{shortestPath(graphA, graphA.nodes_dict[destinatation])}\n\n'
         
         
     else:
         pathAndreinaSum = graphA2.nodes_dict[destinatation].distMin
         pathJavierSum = graphJ1.nodes_dict[destinatation].distMin
     
-        resultString = resultString +  f'El tiempo mímimo de Javier es {pathJavierSum}min por {shortestPath(graphJ1, graphJ1.nodes_dict[destinatation])} \nEl tiempo mímimo de Andreina es {pathAndreinaSum}min por {shortestPath(graphA2, graphA2.nodes_dict[destinatation])}\n'
+        resultString = resultString +  f'El tiempo mímimo de Javier caminando es de {pathJavierSum} minutos por la siguiente ruta: \n{shortestPath(graphJ1, graphJ1.nodes_dict[destinatation])} \n\nEl tiempo mímimo de Andreina caminando es de {pathAndreinaSum} minutos por la siguiente ruta: \n{shortestPath(graphA2, graphA2.nodes_dict[destinatation])}\n\n'
     
     maximum(pathJavierSum,pathAndreinaSum, stdscr)
     return 
@@ -286,7 +296,7 @@ def menu2():
                 elif c == curses.KEY_DOWN and option < len(classes) - 1:
                     option += 1
             stdscr.erase()
-
+            resultString += f"El destino escogido por la pareja esta noche sera {nombres[option]}\n\n"
             path(classes[option], stdscr)
             attributes = {}
             curses.init_pair(1, curses.COLOR_WHITE, curses.COLOR_BLACK)

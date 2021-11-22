@@ -1,42 +1,27 @@
-import curses
+# import networkx as nx
+# import matplotlib.pyplot as plt
 
-classes = ["The sneaky thief", "The smarty wizard", "The proletariat"]
+# G = nx.cycle_graph(12)
+# pos = nx.spring_layout(G)
 
+# cf = plt.figure(1, figsize=(8,8))
+# ax = cf.add_axes((0,0,1,1))
 
-def character(stdscr):
+# for n in G:
+#     G.node[n]['draw'] = nx.drawing.draw_networkx_nodes(G,pos,nodelist=[n], label=None,node_size=200,alpha=0.5,node_color='r')
+# for u,v in G.edges():
+#     G[u][v]['draw']=nx.drawing.draw_networkx_edges(G,pos,edgelist=[(u,v)],alpha=0.5,arrows=False,width=5)
 
-    bool = True
-    while bool:
-        attributes = {}
-        curses.init_pair(1, curses.COLOR_WHITE, curses.COLOR_BLACK)
-        attributes['normal'] = curses.color_pair(1)
+# plt.ion()
+# plt.draw()
 
-        curses.init_pair(2, curses.COLOR_BLACK, curses.COLOR_WHITE)
-        attributes['highlighted'] = curses.color_pair(2)
+# sp = nx.shortest_path(G,0,6)
+# edges = zip(sp[:-1],sp[1:])
 
-        c = 0  # last character read
-        option = 0  # the current option that is marked
-        while c != 10:  # Enter in ascii
-            stdscr.erase()
-            stdscr.addstr("What is your class?\n", curses.A_UNDERLINE)
-            for i in range(len(classes)):
-                if i == option:
-                    attr = attributes['highlighted']
-                else:
-                    attr = attributes['normal']
-                stdscr.addstr("{0}. ".format(i + 1))
-                stdscr.addstr(classes[i] + '\n', attr)
-            c = stdscr.getch()
-            if c == curses.KEY_UP and option > 0:
-                option -= 1
-            elif c == curses.KEY_DOWN and option < len(classes) - 1:
-                option += 1
-
-        stdscr.addstr("You chose {0}\nPress any key to back".format(classes[option]))
-        stdscr.getch()
-        bool=False
-
-
-def menucito():
-
-    curses.wrapper(character)
+# for u,v in edges:
+#     plt.pause(1)
+#     G.node[u]['draw'].set_color('r')
+#     G.node[v]['draw'].set_color('r')
+#     G[u][v]['draw'].set_alpha(1.0)
+#     G[u][v]['draw'].set_color('r')
+#     plt.draw()
