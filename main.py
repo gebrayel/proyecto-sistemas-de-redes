@@ -16,21 +16,27 @@ startNodeA = "5213"
 Brewery = "5012"
 Disco = "5014"
 Bar = "5411"
+resultString:str = ""
 
-
-def maximum(a, b):
+def maximum(a, b, stdscr):
      
+    global resultString
     if a > b:
         c=str(a-b)
-        print("Andreína debe salir "+c+"min después de Javier para llegar al mismo tiempo")
+        resultString = resultString + "Andreína debe salir "+c+"min después de Javier para llegar al mismo tiempo"
+        # stdscr.addstr("Andreína debe salir "+c+"min después de Javier para llegar al mismo tiempo", curses.A_UNDERLINE)
+        
         return 
     elif a< b:
         c=str(b-a)
-        print("Javier debe salir "+c+"min después de Andreína para llegar al mismo tiempo")
+        resultString = resultString + "Javier debe salir "+c+"min después de Andreína para llegar al mismo tiempo"
+        
+        
         return
     else: 
-         print("Ambos se encuentran si salen al mismo tiempo.")
-
+        resultString = resultString + "Ambos se encuentran si salen al mismo tiempo."
+        
+        
 def create():
     global graphJ 
     global graphA 
@@ -168,7 +174,8 @@ def dijkstra(graphX: Graph, startNode:str):
     #---------------------------------------------------------------
 
     return 0
-def path(finalNode:str):
+def path(finalNode:str, stdscr):
+    global resultString
     create()
     #aristas javier
 
@@ -197,20 +204,19 @@ def path(finalNode:str):
     firstMax = max(graphA.nodes_dict[destinatation].distMin, graphJ.nodes_dict[destinatation].distMin)
     secondMax = max(graphJ1.nodes_dict[destinatation].distMin, graphA2.nodes_dict[destinatation].distMin)
 
-    print(graphA.nodes_dict[destinatation].distMin)
-    print(graphJ.nodes_dict[destinatation].distMin)
-    print(graphA2.nodes_dict[destinatation].distMin)
-    print(graphJ1.nodes_dict[destinatation].distMin)
     if(firstMax <= secondMax):
         pathAndreinaSum = graphA.nodes_dict[destinatation].distMin
         pathJavierSum = graphJ.nodes_dict[destinatation].distMin
-        print(f'El tiempo mímimo de Javier es {pathJavierSum}min por {shortestPath(graphJ, graphJ.nodes_dict[destinatation])} \nEl tiempo mímimo de Andreina es {pathAndreinaSum}min por {shortestPath(graphA, graphA.nodes_dict[destinatation])} '+"\n")
-    
+        resultString = resultString + f'El tiempo mímimo de Javier es {pathJavierSum}min por {shortestPath(graphJ, graphJ.nodes_dict[destinatation])} \nEl tiempo mímimo de Andreina es {pathAndreinaSum}min por {shortestPath(graphA, graphA.nodes_dict[destinatation])}\n'
+        
+        
     else:
         pathAndreinaSum = graphA2.nodes_dict[destinatation].distMin
         pathJavierSum = graphJ1.nodes_dict[destinatation].distMin
-        print(f'El tiempo mímimo de Javier es {pathJavierSum}min por {shortestPath(graphJ1, graphJ1.nodes_dict[destinatation])} \nEl tiempo mímimo de Andreina es {pathAndreinaSum}min por {shortestPath(graphA2, graphA2.nodes_dict[destinatation])} '+"\n")
-    maximum(pathJavierSum,pathAndreinaSum)
+    
+        resultString = resultString +  f'El tiempo mímimo de Javier es {pathJavierSum}min por {shortestPath(graphJ1, graphJ1.nodes_dict[destinatation])} \nEl tiempo mímimo de Andreina es {pathAndreinaSum}min por {shortestPath(graphA2, graphA2.nodes_dict[destinatation])}\n'
+    
+    maximum(pathJavierSum,pathAndreinaSum, stdscr)
     return 
 def menu():
     loop = "0"
@@ -246,8 +252,9 @@ def menu():
             print ("I'm sorry, I didn't get that" + "\n"*5)
 def menu2():
     classes = [Brewery, Disco, Bar]
-
-
+    nombres = ["Cerveceria Mi Rolita", "Discoteca The Darkness", "Bar La Pasion"]
+    decisiones = ["Ver otro recorrido", "Salir"]
+    numeros = [1,0]
     def character(stdscr):
 
         bool = True
@@ -263,29 +270,60 @@ def menu2():
             option = 0  # the current option that is marked
             while c != 10:  # Enter in ascii
                 stdscr.erase()
-                stdscr.addstr("What is your class?\n", curses.A_UNDERLINE)
+                stdscr.addstr("Que recorrido quiere visualizar?\n", curses.A_UNDERLINE)
                 for i in range(len(classes)):
                     if i == option:
                         attr = attributes['highlighted']
                     else:
                         attr = attributes['normal']
                     stdscr.addstr("{0}. ".format(i + 1))
-                    stdscr.addstr(classes[i] + '\n', attr)
+                    stdscr.addstr(nombres[i] + '\n', attr)
                 c = stdscr.getch()
                 if c == curses.KEY_UP and option > 0:
                     option -= 1
                 elif c == curses.KEY_DOWN and option < len(classes) - 1:
                     option += 1
-            stdscr.addstr("You chose {0}\nPress any key to back".format(classes[option]))
-            stdscr.getch()
+            stdscr.erase()
+
+            path(classes[option], stdscr)
+            attributes = {}
+            curses.init_pair(1, curses.COLOR_WHITE, curses.COLOR_BLACK)
+            attributes['normal'] = curses.color_pair(1)
+
+            curses.init_pair(2, curses.COLOR_BLACK, curses.COLOR_WHITE)
+            attributes['highlighted'] = curses.color_pair(2)
+
+            c = 0  # last character read
+            option = 0  # the current option that is marked
+            while c != 10:  # Enter in ascii
+                stdscr.erase()
+                stdscr.addstr(f"{resultString}\n", curses.A_UNDERLINE)
+                stdscr.addstr("\n\n\nQue desea hacer?\n", curses.A_UNDERLINE)
+                for i in range(len(decisiones)):
+                    if i == option:
+                        attr = attributes['highlighted']
+                    else:
+                        attr = attributes['normal']
+                    stdscr.addstr("{0}. ".format(i + 1))
+                    stdscr.addstr(decisiones[i] + '\n', attr)
+                c = stdscr.getch()
+                if c == curses.KEY_UP and option > 0:
+                    option -= 1
+                elif c == curses.KEY_DOWN and option < len(decisiones) - 1:
+                    option += 1
             
-            bool=False
+            if not numeros[option]:
+                bool = False
+            
+            
+                
+
     def menucito():
 
         curses.wrapper(character)
     menucito()
 def main():
-    menu()
+    menu2()
         
         
 
